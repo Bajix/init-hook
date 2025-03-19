@@ -2,7 +2,7 @@
 name = "init-hook-macros"
 authors = ["Thomas Sieverding <Thomas@bajix.com>"]
 edition = "2024"
-version = "1.0.0"
+version = "2.0.0"
 description = "Macros for init-hook"
 readme = "./README.md"
 license = "MIT OR Apache-2.0"
