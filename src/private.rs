@@ -1,8 +1,5 @@
-#[doc(hidden)]
-pub use linkme;
 use linkme::distributed_slice;
 
-#[doc(hidden)]
 #[distributed_slice]
 pub static INIT: [bool];
 
@@ -16,7 +13,6 @@ fn assert_configered() {
     }
 }
 
-#[doc(hidden)]
 #[distributed_slice]
 pub static INIT_FNS: [fn()];
 
