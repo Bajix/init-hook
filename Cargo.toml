@@ -1,0 +1,32 @@
+[package]
+authors = ["Thomas Sieverding <Thomas@bajix.com>"]
+edition = "2024"
+name = "init-hook"
+version = "1.0.0"
+description = "Guaranteed one-time initialization"
+readme = "./README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Bajix/init-hook/"
+rust-version = "1.85"
+
+[dependencies]
+ctor = { version = "0.4.1", default-features = false, features = [
+    "proc_macro",
+] }
+init-hook-macros = { version = "1.0.0", path = "./init-hook-macros" }
+linkme = "0.3.32"
+
+[lib]
+doctest = true
+bench = false
+
+[workspace]
+members = ["init-hook-macros"]
+
+[profile.release]
+lto = "fat"
+opt-level = 3
+codegen-units = 1
+
+[package.metadata.docs.rs]
+rustdoc-args = ["--cfg", "docsrs"]

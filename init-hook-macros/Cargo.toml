@@ -1,0 +1,20 @@
+[package]
+name = "init-hook-macros"
+authors = ["Thomas Sieverding <Thomas@bajix.com>"]
+edition = "2024"
+version = "1.0.0"
+description = "Macros for init-hook"
+readme = "./README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Bajix/init-hook/"
+rust-version = "1.85"
+
+[lib]
+test = false
+doctest = false
+proc-macro = true
+
+[dependencies]
+darling = "0.20"
+quote = "1.0"
+syn = { version = "2", features = ["full"] }
