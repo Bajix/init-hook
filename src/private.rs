@@ -14,9 +14,18 @@ fn assert_configered() {
 }
 
 #[distributed_slice]
+pub static UNSAFE_INIT_FNS: [unsafe fn()];
+
+#[distributed_slice]
 pub static INIT_FNS: [fn()];
 
 pub unsafe fn call_init_fns() {
+    for unsafe_init_fn in UNSAFE_INIT_FNS.iter() {
+        unsafe {
+            unsafe_init_fn();
+        }
+    }
+
     for init_fn in INIT_FNS.iter() {
         init_fn()
     }

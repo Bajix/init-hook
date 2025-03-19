@@ -15,17 +15,22 @@ pub use linkme;
 /// # Example
 ///
 /// ```
-/// use std::sync::atomic::{AtomicBool, Ordering};
-/// static INIT_CALLED: AtomicBool = AtomicBool::new(false);
+/// use std::sync::atomic::{AtomicUsize, Ordering};
+/// static COUNTER: AtomicUsize = AtomicUsize::new(0);
 ///
 /// #[init_hook::call_on_init]
-/// fn init() {
-///     INIT_CALLED.store(true, Ordering::Release);
+/// unsafe fn init_once_unchecked() {
+///     COUNTER.fetch_add(1, Ordering::Release);
+/// }
+///
+/// #[init_hook::call_on_init]
+/// fn init_once() {
+///     COUNTER.fetch_add(1, Ordering::Release);
 /// }
 ///
 /// fn main() {
 ///    init_hook::init!();
-///    assert!(INIT_CALLED.load(Ordering::Acquire));
+///    assert_eq!(COUNTER.load(Ordering::Acquire), 2);
 /// }
 /// ```
 ///

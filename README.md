@@ -10,20 +10,25 @@ This crate allows registering functions for guaranteed initialization during mai
 ### Example
 
 ```rust
-use std::sync::atomic::{AtomicBool, Ordering};
-static INIT_CALLED: AtomicBool = AtomicBool::new(false);
+use std::sync::atomic::{AtomicUsize, Ordering};
+static COUNTER: AtomicUsize = AtomicUsize::new(0);
 
-// Register function to be called during init
+// Register function to be called exactly once during init
 #[init_hook::call_on_init]
-fn init() {
-    INIT_CALLED.store(true, Ordering::Release);
+fn init_once() {
+    COUNTER.fetch_add(1, Ordering::Release);
+}
+
+// Registered functions can also be unsafe
+#[init_hook::call_on_init]
+unsafe fn init_once_unchecked() {
+    COUNTER.fetch_add(1, Ordering::Release);
 }
 
 fn main() {
     // This is enforced by a pre-main assertion to always be included exactly once
     init_hook::init!();
-
-    assert!(INIT_CALLED.load(Ordering::Acquire));
+    assert_eq!(COUNTER.load(Ordering::Acquire), 2);
 }
 ```
 

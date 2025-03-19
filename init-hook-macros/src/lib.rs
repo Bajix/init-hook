@@ -39,12 +39,22 @@ pub fn call_on_init(
     let ident = input.sig.ident.clone();
     let static_ident = Ident::new(&ident.to_string().to_uppercase(), ident.span());
 
-    let expanded = quote! {
-        #[init_hook::linkme::distributed_slice(init_hook::__private::INIT_FNS)]
-        #[linkme(crate = init_hook::linkme)]
-        static #static_ident: fn() = #ident;
+    let expanded = if input.sig.unsafety.is_some() {
+        quote! {
+            #[init_hook::linkme::distributed_slice(init_hook::__private::UNSAFE_INIT_FNS)]
+            #[linkme(crate = init_hook::linkme)]
+            static #static_ident: unsafe fn() = #ident;
 
-        #input
+            #input
+        }
+    } else {
+        quote! {
+            #[init_hook::linkme::distributed_slice(init_hook::__private::INIT_FNS)]
+            #[linkme(crate = init_hook::linkme)]
+            static #static_ident: fn() = #ident;
+
+            #input
+        }
     };
 
     expanded.into()
